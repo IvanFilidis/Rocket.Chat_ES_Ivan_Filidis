@@ -1,0 +1,274 @@
+1- Set up a T2 Micro EC2(free tier/US - east1), EBS 30GB GP3 disk
+2- Got help with a friend to set up docker
+3- Downloaded the docker-compose file
+4- Edited the ROOTURL and a few other parameters inside the compose file
+5- Installed NGINX using "amazon-linux-extras install nginx1"
+6- Configured NGINX using HTTP (80) using these documents as an example: LINK_PARA_DOC (mine was in /etc/nginx/nginx.conf)
+7- Span up the docker containers using "docker-compose up -d"
+8- With the help of a friend I changed the SG rules for the EC2 instance, accepting connections on port 80
+9- Started the NGINX service
+
+- ROCKET CHAT RUNNING ON: http://ec2-3-235-135-252.compute-1.amazonaws.com/ (HTTP/80)
+
+API TEST(done in Linux Terminal)
+
+1- Generated my credentials through rocketchat app(desktop)
+
+2- Used the "/api/v1/users.create" endpoint sometimes to create some users to play with, created one for my friend to test in another computer at his house
+curl:
+curl -H "X-Auth-Token: TOKENTOKENTOKENTOKEN" \
+     -H "X-User-Id: USERIDUSERIDUSERID" \
+     -H "Content-type:application/json" \
+     http://ec2-3-235-135-252.compute-1.amazonaws.com/api/v1/users.create \
+     -d '{"name": "Test Account", "email": "testaccount@genericemail.com", "password": "PASSWORDPASSWORD", "username": "Test_Account"}'
+result:
+{"user":{"_id":"DPWKEPB2tAYn3Bmbc","createdAt":"2022-04-28T02:49:43.495Z","username":"Test_Account","emails":[{"address":"testaccount@genericemail.com","verified":false}],"type":"user","status":"offline","active":true,"_updatedAt":"2022-04-28T02:49:43.582Z","__rooms":["GENERAL"],"roles":["user"],"name":"Test Account","settings":{}},"success":true}{
+ "user": {
+  "_id": "DPWKEPB2tAYn3Bmbc",
+  "createdAt": "2022-04-28T02:49:43.495Z",
+  "username": "Test_Account",
+  "emails": [
+   {
+    "address": "testaccount@genericemail.com",
+    "verified": false
+   }
+  ],
+  "type": "user",
+  "status": "offline",
+  "active": true,
+  "_updatedAt": "2022-04-28T02:49:43.582Z",
+  "__rooms": [
+   "GENERAL"
+  ],
+  "roles": [
+   "user"
+  ],
+  "name": "Test Account",
+  "settings": {}
+ },
+ "success": true
+}
+
+3- Created some more users and gave them roles for futher purposes
+
+4- Used the "/api/v1/rooms.info" endpoint to get the rooms infos(missed all users names on the room)
+curl:
+curl -H "X-Auth-Token: TOKENTOKENTOKENTOKEN"
+     -H "X-User-Id: USERIDUSERIDUSERID"      -H "Content-thttp://ec2-3-235-135-252.compute-1.amazonaws.com/api/v1/rooms.info?roomName='Offtopic_and_Memes'
+result:
+{"room":{"_id":"GtoY6ZFDqEif6TS4D","fname":"Offtopic_and_Memes","customFields":{},"name":"Offtopic_and_Memes","t":"c","msgs":10,"usersCount":4,"u":{"_id":"swAQDKKnd9276HNeo","username":"ivanfilidis"},"ts":"2022-04-28T02:36:33.660Z","ro":false,"default":false,"sysMes":true,"_updatedAt":"2022-04-28T13:44:35.119Z","lastMessage":{"_id":"m7x6pbQy26oZSE9pm","rid":"GtoY6ZFDqEif6TS4D","msg":"FINDTHISWITHQUERY","ts":"2022-04-28T13:44:35.065Z","u":{"_id":"DPWKEPB2tAYn3Bmbc","username":"Test_Account","name":"Test Account"},"_updatedAt":"2022-04-28T13:44:35.111Z","urls":[],"mentions":[],"channels":[],"md":[{"type":"PARAGRAPH","value":[{"type":"PLAIN_TEXT","value":"FINDTHISWITHQUERY"}]}]},"lm":"2022-04-28T13:44:35.065Z"},"success":true}{
+ "room": {
+  "_id": "GtoY6ZFDqEif6TS4D",
+  "fname": "Offtopic_and_Memes",
+  "customFields": {},
+  "name": "Offtopic_and_Memes",
+  "t": "c",
+  "msgs": 10,
+  "usersCount": 4,
+  "u": {
+   "_id": "swAQDKKnd9276HNeo",
+   "username": "ivanfilidis"
+  },
+  "ts": "2022-04-28T02:36:33.660Z",
+  "ro": false,
+  "default": false,
+  "sysMes": true,
+  "_updatedAt": "2022-04-28T13:44:35.119Z",
+  "lastMessage": {
+   "_id": "m7x6pbQy26oZSE9pm",
+   "rid": "GtoY6ZFDqEif6TS4D",
+   "msg": "FINDTHISWITHQUERY",
+   "ts": "2022-04-28T13:44:35.065Z",
+   "u": {
+    "_id": "DPWKEPB2tAYn3Bmbc",
+    "username": "Test_Account",
+    "name": "Test Account"
+   },
+   "_updatedAt": "2022-04-28T13:44:35.111Z",
+   "urls": [],
+   "mentions": [],
+   "channels": [],
+   "md": [
+    {
+     "type": "PARAGRAPH",
+     "value": [
+      {
+       "type": "PLAIN_TEXT",
+       "value": "FINDTHISWITHQUERY"
+      }
+     ]
+    }
+   ]
+  },
+  "lm": "2022-04-28T13:44:35.065Z"
+ },
+ "success": true
+}
+
+5- Used the "/api/v1/users.list" endpoint to check all the roles and status I gave to all users
+curl:
+curl -H "X-Auth-Token: TOKENTOKENTOKENTOKEN" \
+     -H "X-User-Id: USERIDUSERIDUSERID" \
+     -H "Content-type:application/json" \
+     http://ec2-3-235-135-252.compute-1.amazonaws.com/api/v1/users.list
+result:
+{
+ "users": [
+  {
+   "_id": "oEJsfZ3J22P3q3Svf",
+   "username": "Anthony_Kids",
+   "emails": [
+    {
+     "address": "akids@genericemail.com",
+     "verified": false
+    }
+   ],
+   "status": "offline",
+   "active": true,
+   "roles": [
+    "user",
+    "moderator"
+   ],
+   "name": "Anthony Kids",
+   "nameInsensitive": "anthony kids"
+  },
+  {
+   "_id": "tEsst9w9JYfKZNHuf",
+   "username": "Joao_Antunes",
+   "emails": [
+    {
+     "address": "joaofantunes@genericemail.com",
+     "verified": false
+    }
+   ],
+   "status": "offline",
+   "active": true,
+   "roles": [
+    "user"
+   ],
+   "name": "Joao F. Antunes",
+   "nameInsensitive": "joao f. antunes"
+  },
+  {
+   "_id": "7GQhitnnNnATA2uv5",
+   "username": "Luiz_Kischel",
+   "emails": [
+    {
+     "address": "luiz.kischel@hotmail.com",
+     "verified": false
+    }
+   ],
+   "status": "online",
+   "active": true,
+   "roles": [
+    "user"
+   ],
+   "name": "Luiz Kischel",
+   "lastLogin": "2022-04-28T12:15:15.490Z",
+   "nameInsensitive": "luiz kischel"
+  },
+  {
+   "_id": "dHrRxAssespspigPJ",
+   "username": "Siya_Beson",
+   "emails": [
+    {
+     "address": "siyabongabeson@genericemail.com",
+     "verified": false
+    }
+   ],
+   "status": "offline",
+   "active": true,
+   "roles": [
+    "user",
+    "leader"
+   ],
+   "name": "Siyabonga Beson",
+   "nameInsensitive": "siyabonga beson"
+  },
+  {
+   "_id": "DPWKEPB2tAYn3Bmbc",
+   "username": "Test_Account",
+   "emails": [
+    {
+     "address": "testaccount@genericemail.com",
+     "verified": false
+    }
+   ],
+   "status": "away",
+   "active": true,
+   "roles": [
+    "user",
+    "admin"
+   ],
+   "name": "Test Account",
+   "lastLogin": "2022-04-28T11:28:39.350Z",
+   "nameInsensitive": "test account"
+  },
+  {
+   "_id": "swAQDKKnd9276HNeo",
+   "emails": [
+    {
+     "address": "ivanfilidis@gmail.com",
+     "verified": false
+    }
+   ],
+   "status": "online",
+   "active": true,
+   "roles": [
+    "user",
+    "admin"
+   ],
+   "name": "Ivan Filidis José",
+   "lastLogin": "2022-04-28T13:22:59.986Z",
+   "username": "ivanfilidis",
+   "nameInsensitive": "ivan filidis josé"
+  },
+  {
+   "_id": "rocket.cat",
+   "name": "Rocket.Cat",
+   "username": "rocket.cat",
+   "status": "online",
+   "active": true,
+   "roles": [
+    "bot"
+   ],
+   "avatarETag": null,
+   "nameInsensitive": "rocket.cat"
+  }
+ ],
+ "count": 7,
+ "offset": 0,
+ "total": 7,
+ "success": true
+}
+
+
+
+
+ DOCUMENTATION USED
+
+- dockers compose
+https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-compose-on-ubuntu-20-04-pt
+
+- rocket chat installation
+https://docs.rocket.chat/quick-start/installing-and-updating/rapid-deployment-methods/docker-and-docker-compose
+
+- editing host files / docker whithim rocket chat
+https://docs.rocket.chat/quick-start/installing-and-updating/rapid-deployment-methods/docker-and-docker-compose/docker-containers
+
+- create user
+https://developer.rocket.chat/reference/api/rest-api/endpoints/team-collaboration-endpoints/users-endpoints/create-user-endpoint
+
+- get API tokens
+https://docs.rocket.chat/guides/user-guides/user-panel/managing-your-account/personal-access-token
+
+- room/channel info
+https://developer.rocket.chat/reference/api/rest-api/endpoints/team-collaboration-endpoints/rooms-endpoints/info
+
+- create room/channel
+https://developer.rocket.chat/reference/api/rest-api/endpoints/team-collaboration-endpoints/channels-endpoints/create
+
+- users list
+https://developer.rocket.chat/reference/api/rest-api/endpoints/team-collaboration-endpoints/users-endpoints/get-users-list
+
+- 
